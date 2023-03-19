@@ -1,8 +1,9 @@
 openai:
   api-key: ${OPENAI_API_KEY}
   organization: ${OPENAI_ORGANIZATION??:}
-debug:
-  level: debug
+logging:
+  level:
+    com.pushkin: debug
 spring:
   profiles:
     active: test

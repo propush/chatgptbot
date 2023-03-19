@@ -30,7 +30,7 @@ class OpenaiServiceImpl(
             val text = collector.toString().trim()
             collector.delete(0, collector.length)
             if (text.isNotBlank() || !completionChunk.hasNext) {
-                logger.info { "Completed chunk: $text" }
+                logger.debug { "Completed chunk: $text" }
                 chunkCallback(completionChunk.copy(text = text))
             }
         }
