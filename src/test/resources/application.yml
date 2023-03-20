@@ -1,6 +1,7 @@
 openai:
   api-key: ${OPENAI_API_KEY}
   organization: ${OPENAI_ORGANIZATION??:}
+  retry-count: 3
 bot:
   mattermost:
     url: https://localhost:8065

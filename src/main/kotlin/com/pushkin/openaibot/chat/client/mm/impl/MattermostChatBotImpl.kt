@@ -174,7 +174,7 @@ class MattermostChatBotImpl(
     override fun afterConnectionEstablished(session: WebSocketSession) {
         logger.info { "Connection established" }
         webSocketSession = session
-        logger.info { "Sending authentication: $authentication" }
+        logger.trace { "Sending authentication: $authentication" }
         webSocketSession?.sendMessage(toWsMessage(authentication))
         logger.info { "Authentication sent" }
     }

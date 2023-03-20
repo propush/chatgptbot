@@ -1,6 +1,7 @@
 openai:
   api-key: ${OPENAI_API_KEY}
   organization: ${OPENAI_ORGANIZATION??:}
+  retry-count: ${OPENAI_RETRY_COUNT??:3}
 bot:
   mattermost:
     url: ${MATTERMOST_BASE_URL}
@@ -11,7 +12,7 @@ bot:
       - chatgpt
 logging:
   level:
-    com.pushkin: debug
+    com.pushkin: ${LOG_LEVEL??:info}
 spring:
   profiles:
     active: prod

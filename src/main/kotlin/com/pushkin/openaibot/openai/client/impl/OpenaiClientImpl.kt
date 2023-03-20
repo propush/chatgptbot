@@ -15,7 +15,9 @@ import org.springframework.http.client.ClientHttpRequest
 import org.springframework.http.client.ClientHttpResponse
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RequestCallback
+import org.springframework.web.client.ResourceAccessException
 import org.springframework.web.client.RestTemplate
+
 
 @Service
 class OpenaiClientImpl(
@@ -27,6 +29,7 @@ class OpenaiClientImpl(
     companion object {
         private const val DEFAULT_MODEL = "gpt-3.5-turbo-0301"
         private const val DEFAULT_ROLE = "user"
+        private const val BUFFER_SIZE = 1024
 
         //        private const val DEFAULT_MODEL = "text-davinci-003"
         private const val BASE_URL_V1 = "https://api.openai.com/v1"
@@ -43,21 +46,32 @@ class OpenaiClientImpl(
         maxTokens: Int,
         chunkCallback: (completionChunk: CompletionChunk) -> Unit
     ): String {
-        logger.info { "Fetching completion for prompt: $prompt" }
-        val rq = RequestCallback { prepareCompletionHttpRequest(it, prompt, maxTokens) }
+        val rq: RequestCallback = RequestCallback { prepareCompletionHttpRequest(it, prompt, maxTokens) }
         val rs = StringBuffer()
-        try {
-            restTemplate.execute(
-                "${BASE_URL_V1}${COMPLETION_PATH}",
-                HttpMethod.POST,
-                rq,
-                { response -> processResponseBody(response, rs, chunkCallback) },
-            )
-        } catch (e: Exception) {
-            throw OpenaiClientException("Error while fetching completion", e)
-        }
-        if (rs.isEmpty()) {
-            throw OpenaiClientException("No response received")
+        var retryCount = 0
+        var gotResponse = false
+        do {
+            try {
+                retryCount++
+                logger.info { "Fetching completion for prompt, try $retryCount of ${openaiClientProperties.retryCount}: $prompt" }
+                val responseExtractor: (response: ClientHttpResponse) -> Unit =
+                    { response -> processResponseBody(response, rs, chunkCallback) }
+                restTemplate.execute(
+                    "${BASE_URL_V1}${COMPLETION_PATH}",
+                    HttpMethod.POST,
+                    rq,
+                    responseExtractor,
+                    null
+                )
+                gotResponse = true
+            } catch (e: ResourceAccessException) {
+                logger.warn { "Retrying..." }
+            } catch (e: Exception) {
+                throw OpenaiClientException("Error while fetching completion", e)
+            }
+        } while (retryCount < openaiClientProperties.retryCount && !gotResponse)
+        if (!gotResponse) {
+            rs.append("Sorry, I'm not able to answer your question right now. Please try again later.")
         }
         return rs.toString()
     }
@@ -71,13 +85,13 @@ class OpenaiClientImpl(
         if (response.statusCode != HttpStatus.OK) {
             throw OpenaiClientException("Bad response code while fetching completion: ${response.statusCode}")
         }
-        val sb = StringBuffer(1024)
-        val bb = ByteArray(1024)
+        val sb = StringBuffer(BUFFER_SIZE)
+        val bb = ByteArray(BUFFER_SIZE)
         var byteIndex = 0
         response.body.use { s ->
             do {
                 val byteRead = s.read()
-                if (byteRead >= 0 && byteIndex < 1024) {
+                if (byteRead >= 0 && byteIndex < BUFFER_SIZE) {
                     bb[byteIndex++] = byteRead.toByte()
                     if (byteRead == 10) {
                         sb.append(String(bb, 0, byteIndex))
