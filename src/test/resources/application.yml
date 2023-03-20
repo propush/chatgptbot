@@ -2,6 +2,8 @@ openai:
   api-key: ${OPENAI_API_KEY}
   organization: ${OPENAI_ORGANIZATION??:}
   retry-count: 3
+chat:
+  max-tokens: 100
 bot:
   mattermost:
     url: https://localhost:8065

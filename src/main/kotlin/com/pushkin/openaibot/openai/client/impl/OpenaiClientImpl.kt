@@ -64,6 +64,7 @@ class OpenaiClientImpl(
                     null
                 )
                 gotResponse = true
+                logger.info { "Got response: ${rs.length} chars" }
             } catch (e: ResourceAccessException) {
                 logger.warn { "Retrying..." }
             } catch (e: Exception) {

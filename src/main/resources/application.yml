@@ -2,6 +2,8 @@ openai:
   api-key: ${OPENAI_API_KEY}
   organization: ${OPENAI_ORGANIZATION??:}
   retry-count: ${OPENAI_RETRY_COUNT??:3}
+chat:
+  max-tokens: ${CHAT_MAX_TOKENS??:500}
 bot:
   mattermost:
     url: ${MATTERMOST_BASE_URL}

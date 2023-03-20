@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class ChatService(
+    private val chatServiceProperties: ChatServiceProperties,
     private val chatBot: ChatBot<MattermostAuthRq, IncomingMessageVO, OutgoingMessageVO>,
     private val openaiService: OpenaiService
 ) : KLogging() {
@@ -24,7 +25,7 @@ class ChatService(
 
     private fun onMessageReceived(message: IncomingMessageVO) {
         logger.debug { "Message received: $message" }
-        openaiService.query(message.text, 500) { response ->
+        openaiService.query(message.text, chatServiceProperties.maxTokens) { response ->
             logger.debug { "Response received: $response" }
             val text = response.text + if (response.hasNext) "..." else "<END>"
             try {
