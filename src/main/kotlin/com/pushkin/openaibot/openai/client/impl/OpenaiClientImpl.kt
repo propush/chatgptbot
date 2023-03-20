@@ -25,10 +25,12 @@ class OpenaiClientImpl(
 ) : OpenaiClient, KLogging() {
 
     companion object {
-        //        private const val DEFAULT_MODEL = "gpt-3.5-turbo-0301"
-        private const val DEFAULT_MODEL = "text-davinci-003"
+        private const val DEFAULT_MODEL = "gpt-3.5-turbo-0301"
+        private const val DEFAULT_ROLE = "user"
+
+        //        private const val DEFAULT_MODEL = "text-davinci-003"
         private const val BASE_URL_V1 = "https://api.openai.com/v1"
-        private const val COMPLETION_PATH = "/completions"
+        private const val COMPLETION_PATH = "/chat/completions"
 
         private val dataRegex = Regex(
             "^[\\n\\s]*data: \\s*(.*)[\\n\\s]*\$",
@@ -70,15 +72,21 @@ class OpenaiClientImpl(
             throw OpenaiClientException("Bad response code while fetching completion: ${response.statusCode}")
         }
         val sb = StringBuffer(1024)
+        val bb = ByteArray(1024)
+        var byteIndex = 0
         response.body.use { s ->
             do {
                 val byteRead = s.read()
-                if (byteRead >= 0) {
-                    sb.append(byteRead.toChar())
+                if (byteRead >= 0 && byteIndex < 1024) {
+                    bb[byteIndex++] = byteRead.toByte()
                     if (byteRead == 10) {
+                        sb.append(String(bb, 0, byteIndex))
+                        byteIndex = 0
                         chunkReceived(sb, rs, false, chunkCallback)
                     }
                 } else {
+                    sb.append(String(bb, 0, byteIndex))
+                    byteIndex = 0
                     chunkReceived(sb, rs, true, chunkCallback)
                 }
             } while (byteRead >= 0)
@@ -106,7 +114,7 @@ class OpenaiClientImpl(
 
                 is CompletionResponse.CompletionRs -> {
                     logger.debug { "Completion response: ${completionResponse.id}" }
-                    val choices = completionResponse.choices.joinToString { it.text ?: "" }
+                    val choices = completionResponse.choices.joinToString { it.delta?.content ?: "" }
                     target.append(choices)
                     chunkCallback(CompletionChunk(choices, !lastChunk))
                 }
@@ -146,7 +154,7 @@ class OpenaiClientImpl(
     }
 
     private fun defaultCompletion(prompt: String, maxTokens: Int) = CompletionRq(
-        prompt = prompt,
+        messages = listOf(CompletionRq.Message(DEFAULT_ROLE, prompt)),
         model = DEFAULT_MODEL,
         stream = true,
         maxTokens = maxTokens,

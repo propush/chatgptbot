@@ -3,7 +3,8 @@ package com.pushkin.openaibot.openai.vo
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class CompletionRq(
-    val prompt: String,
+
+    val messages: List<Message>,
 
     val model: String,
 
@@ -13,4 +14,11 @@ data class CompletionRq(
     val maxTokens: Int,
 
     val temperature: Int
-)
+) {
+
+    data class Message(
+        val role: String?,
+        val content: String
+    )
+
+}

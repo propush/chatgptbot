@@ -17,11 +17,11 @@ class OpenaiClientImplTest {
 
     @Test
     fun fetchCompletion() {
-        val prompt = "This is a test"
+        val prompt = "Say This is a test"
         val completion = openaiClient.fetchCompletion(prompt, 7) {
             println("completionChunk: $it")
         }
-        assertEquals("This is a test sentence", completion.trim())
+        assertTrue(completion.trim().startsWith("This is a test", true))
     }
 
     @Test
