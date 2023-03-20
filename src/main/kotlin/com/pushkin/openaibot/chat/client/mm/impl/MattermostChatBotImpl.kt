@@ -67,6 +67,7 @@ class MattermostChatBotImpl(
         if (message.event == "posted") {
             if (!mattermostChatBotProperties.channels.contains(message.data.channelName)) {
                 logger.warn { "Message posted to channel ${message.data.channelName} is not in the list of channels to listen to" }
+                return
             }
             try {
                 val post = objectMapper.readValue(message.data.post, MattermostPostVO::class.java)
