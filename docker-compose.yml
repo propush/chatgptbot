@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: openaibot
+    restart: always
+    environment:
+      - MATTERMOST_BASE_URL
+      - MATTERMOST_BOT_TOKEN
+      - MATTERMOST_TEAM
+      - OPENAI_API_KEY
+
