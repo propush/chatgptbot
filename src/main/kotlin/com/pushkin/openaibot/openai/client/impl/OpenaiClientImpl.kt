@@ -25,6 +25,7 @@ class OpenaiClientImpl(
 ) : OpenaiClient, KLogging() {
 
     companion object {
+        //        private const val DEFAULT_MODEL = "gpt-3.5-turbo-0301"
         private const val DEFAULT_MODEL = "text-davinci-003"
         private const val BASE_URL_V1 = "https://api.openai.com/v1"
         private const val COMPLETION_PATH = "/completions"

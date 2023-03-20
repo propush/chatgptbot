@@ -1,6 +1,14 @@
 openai:
   api-key: ${OPENAI_API_KEY}
   organization: ${OPENAI_ORGANIZATION??:}
+bot:
+  mattermost:
+    url: ${MATTERMOST_BASE_URL}
+    token: ${MATTERMOST_BOT_TOKEN}
+    mentions: # bot will react to these mentions
+      - "@chatgptbot"
+    channels: # allowed channels to answer
+      - chatgpt
 logging:
   level:
     com.pushkin: debug
