@@ -2,14 +2,14 @@ package com.pushkin.openaibot
 
 import com.pushkin.openaibot.chat.client.mm.impl.MattermostChatBotProperties
 import com.pushkin.openaibot.chat.service.ChatServiceProperties
-import com.pushkin.openaibot.openai.client.impl.OpenaiClientProperties
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
 @EnableConfigurationProperties(
-    OpenaiClientProperties::class, MattermostChatBotProperties::class, ChatServiceProperties::class
+    MattermostChatBotProperties::class,
+    ChatServiceProperties::class,
 )
 class OpenaibotApplication
 

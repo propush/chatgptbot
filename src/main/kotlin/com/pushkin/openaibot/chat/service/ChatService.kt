@@ -5,7 +5,7 @@ import com.pushkin.openaibot.chat.client.mm.vo.IncomingMessageVO
 import com.pushkin.openaibot.chat.client.mm.vo.MattermostAuthRq
 import com.pushkin.openaibot.chat.client.mm.vo.OutgoingMessageVO
 import com.pushkin.openaibot.chat.exception.ChatBotPostingFailedException
-import com.pushkin.openaibot.openai.service.OpenaiService
+import com.pushkin.openaigptclient.openai.service.OpenaiService
 import jakarta.annotation.PostConstruct
 import mu.KLogging
 import org.springframework.stereotype.Service
@@ -27,7 +27,7 @@ class ChatService(
         logger.debug { "Message received: $message" }
         openaiService.query(message.text, chatServiceProperties.maxTokens) { response ->
             logger.debug { "Response received: $response" }
-            val text = response.text + if (response.hasNext) "..." else "<END>"
+            val text = response.text + if (response.hasNext) "" else "<END>"
             try {
                 chatBot.postMessage(OutgoingMessageVO(message.channel, text))
             } catch (e: ChatBotPostingFailedException) {
