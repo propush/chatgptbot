@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.pushkin"
-version = "0.0.2-SNAPSHOT"
+version = "0.0.3-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 configurations {
@@ -29,7 +29,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
-    implementation("com.github.propush:openaigptclient-spring-boot-starter:1.0.17")
+    implementation("com.github.propush:openaigptclient-spring-boot-starter:1.0.18")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
