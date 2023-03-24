@@ -37,20 +37,7 @@ CHAT_MAX_TOKENS=500 MATTERMOST_BASE_URL=<YOUR_MATTERMOST_HOST> MATTERMOST_BOT_TO
 ```
 or
 ```
-CHAT_MAX_TOKENS=500 MATTERMOST_BASE_URL=<YOUR_MATTERMOST_HOST> MATTERMOST_BOT_TOKEN=<YOUR_MM_BOT_TOKEN> OPENAI_API_KEY=<YOUR_OPENAI_API_KEY> java -jar ./build/libs/openaibot-0.0.1-SNAPSHOT.jar
-```
-
-## Testing
-Integration tests to be run as:
-
-```
-./gradlew test -Dspring.profiles.active=inttest -DOPENAI_API_KEY=<YOUR_OPENAI_API_KEY> -DMATTERMOST_BASE_URL=<YOUR_MATTERMOST_HOST> -DMATTERMOST_BOT_TOKEN=<YOUR_MM_BOT_TOKEN> 
-```
-
-The rest of the tests to be run as usual:
-
-```
-./gradlew test
+CHAT_MAX_TOKENS=500 MATTERMOST_BASE_URL=<YOUR_MATTERMOST_HOST> MATTERMOST_BOT_TOKEN=<YOUR_MM_BOT_TOKEN> OPENAI_API_KEY=<YOUR_OPENAI_API_KEY> java -jar ./build/libs/openaibot-x.y.z-SNAPSHOT.jar
 ```
 
 ## Contributing
