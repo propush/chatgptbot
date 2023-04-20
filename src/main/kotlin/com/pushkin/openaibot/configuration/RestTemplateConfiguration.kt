@@ -14,7 +14,7 @@ class RestTemplateConfiguration {
     private fun getClientHttpRequestFactory() =
         SimpleClientHttpRequestFactory().apply {
             setConnectTimeout(5000)
-            setReadTimeout(10000)
+            setReadTimeout(60000)
         }
 
 }

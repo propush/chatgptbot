@@ -1,3 +1,3 @@
 FROM openjdk:19
-COPY ./build/libs/openaibot-0.0.3-SNAPSHOT.jar /app.jar
+COPY ./build/libs/openaibot-0.0.4-SNAPSHOT.jar /app.jar
 CMD java -jar app.jar

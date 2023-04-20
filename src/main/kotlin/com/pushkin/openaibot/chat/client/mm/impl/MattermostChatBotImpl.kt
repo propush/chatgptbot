@@ -75,6 +75,7 @@ class MattermostChatBotImpl(
                 val messageText = post.message ?: ""
                 if (mattermostChatBotProperties.mentions.any(messageText::contains)) {
                     logger.debug { "Mention found in message" }
+                    sendTyping(post.channelId)
                     invokeMessageCallback(post.channelId, messageText)
                 } else {
                     logger.debug { "Mention not found in message" }
@@ -88,13 +89,21 @@ class MattermostChatBotImpl(
     }
 
     private fun invokeMessageCallback(channelId: String, messageText: String) {
-        thread {
+        val callbackThread = thread {
             messageCallback?.invoke(
                 IncomingMessageVO(
                     channelId,
                     stripStartingMentions(messageText)
                 )
             )
+        }
+        sendTypingWhileThreadActive(channelId, callbackThread)
+    }
+
+    private fun sendTypingWhileThreadActive(channelId: String, callbackThread: Thread) {
+        while (callbackThread.isAlive) {
+            sendTyping(channelId)
+            Thread.sleep(5000)
         }
     }
 

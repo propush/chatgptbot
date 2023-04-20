@@ -11,4 +11,5 @@ services:
       - MATTERMOST_BOT_TOKEN
       - MATTERMOST_TEAM
       - OPENAI_API_KEY
-
+      - OPENAI_BASE_URL
+      - OPENAI_ORGANIZATION

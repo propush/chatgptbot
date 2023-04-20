@@ -1,9 +1,10 @@
 openai:
+  base-url: ${OPENAI_BASE_URL:https://api.openai.com/v1}
   api-key: ${OPENAI_API_KEY}
-  organization: ${OPENAI_ORGANIZATION??:}
-  retry-count: ${OPENAI_RETRY_COUNT??:3}
+  organization: ${OPENAI_ORGANIZATION:}
+  retry-count: ${OPENAI_RETRY_COUNT:3}
 chat:
-  max-tokens: ${CHAT_MAX_TOKENS??:500}
+  max-tokens: ${CHAT_MAX_TOKENS:500}
 bot:
   mattermost:
     url: ${MATTERMOST_BASE_URL}
@@ -12,9 +13,10 @@ bot:
       - "@chatgptbot"
     channels: # allowed channels to answer
       - chatgpt
+      - testchatgpt
 logging:
   level:
-    com.pushkin: ${LOG_LEVEL??:info}
+    com.pushkin: ${LOG_LEVEL:info}
 spring:
   profiles:
     active: prod
