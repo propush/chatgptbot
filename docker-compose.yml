@@ -9,7 +9,9 @@ services:
     environment:
       - MATTERMOST_BASE_URL
       - MATTERMOST_BOT_TOKEN
-      - MATTERMOST_TEAM
       - OPENAI_API_KEY
       - OPENAI_BASE_URL
       - OPENAI_ORGANIZATION
+      - OPENAI_RETRY_COUNT
+      - LOG_LEVEL
+      - CHAT_MAX_TOKENS
